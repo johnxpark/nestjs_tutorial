@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { Board } from './boards.model';
 import { BoardsService } from './boards.service';
 import { createBoardDto } from './dto/create-board.dto';
@@ -7,18 +7,24 @@ import { createBoardDto } from './dto/create-board.dto';
 export class BoardsController {
   constructor(private boardService: BoardsService) {}
 
-  @Get('/')
+  @Get()
   getAllBoards(): Board[] {
     return this.boardService.getAllBoards();
   }
 
-  @Post('/')
+  @Post()
   createBoard(@Body() createBoardDto: createBoardDto): Board {
     return this.boardService.createBoard(createBoardDto);
   }
 
-  @Get('/:id')
+  @Get(':id')
   getBoardById(@Param('id') id: string): Board {
     return this.boardService.getBoardById(id);
+  }
+
+  @Delete(':id')
+  deleteBoardById(@Param('id') id: string): string {
+    this.boardService.deleteBoardById(id);
+    return `${id} deleted`;
   }
 }

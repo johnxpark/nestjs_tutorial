@@ -5,26 +5,26 @@ import { createBoardDto } from './dto/create-board.dto';
 
 @Controller('boards')
 export class BoardsController {
-  constructor(private boardService: BoardsService) {}
+  constructor(private boardsService: BoardsService) {}
 
   @Get()
   getAllBoards(): Board[] {
-    return this.boardService.getAllBoards();
+    return this.boardsService.getAllBoards();
   }
 
   @Post()
   createBoard(@Body() createBoardDto: createBoardDto): Board {
-    return this.boardService.createBoard(createBoardDto);
+    return this.boardsService.createBoard(createBoardDto);
   }
 
   @Get(':id')
   getBoardById(@Param('id') id: string): Board {
-    return this.boardService.getBoardById(id);
+    return this.boardsService.getBoardById(id);
   }
 
   @Delete(':id')
   deleteBoardById(@Param('id') id: string): string {
-    this.boardService.deleteBoardById(id);
+    this.boardsService.deleteBoardById(id);
     return `${id} deleted`;
   }
 }

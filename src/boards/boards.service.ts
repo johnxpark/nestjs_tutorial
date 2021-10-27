@@ -24,13 +24,13 @@ export class BoardsService {
   }
 
   getBoardById(id: string): Board {
-    const board = this.boards.find((board) => board.id === id);
+    const found = this.boards.find((board) => board.id === id);
 
-    if (!board) {
+    if (!found) {
       throw new NotFoundException(`Board Not Found, id: ${id}`);
     }
 
-    return board;
+    return found;
   }
 
   deleteBoardById(id: string): void {

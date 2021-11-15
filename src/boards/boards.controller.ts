@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardsStatus } from './boards-status.enum';
+import { Board } from './boards.entity';
 import { BoardsService } from './boards.service';
 import { createBoardDto } from './dto/create-board.dto';
 
@@ -17,33 +19,32 @@ import { createBoardDto } from './dto/create-board.dto';
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
-  // @Get()
-  // getAllBoards(): Board[] {
-  //   return this.boardsService.getAllBoards();
-  // }
+  @Post()
+  @UsePipes(ValidationPipe)
+  createBoard(@Body() createBoardDto: createBoardDto): Promise<Board> {
+    return this.boardsService.createBoard(createBoardDto);
+  }
 
-  // @Post()
-  // @UsePipes(ValidationPipe)
-  // createBoard(@Body() createBoardDto: createBoardDto): Board {
-  //   return this.boardsService.createBoard(createBoardDto);
-  // }
+  @Get(':id')
+  getBoardById(@Param('id') id: number): Promise<Board> {
+    return this.boardsService.getBoardById(id);
+  }
 
-  // @Get(':id')
-  // getBoardById(@Param('id') id: string): Board {
-  //   return this.boardsService.getBoardById(id);
-  // }
+  @Get()
+  getAllBoards(): Promise<Board[]> {
+    return this.boardsService.getAllBoards();
+  }
 
-  // @Delete(':id')
-  // deleteBoardById(@Param('id') id: string): string {
-  //   this.boardsService.deleteBoardById(id);
-  //   return `${id} deleted`;
-  // }
+  @Patch(':id/status')
+  updateBoardStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: BoardsStatus,
+  ) {
+    return this.boardsService.updateBoardStatus(id, status);
+  }
 
-  // @Patch(':id/status')
-  // updateBoardStatus(
-  //   @Param('id') id: string,
-  //   @Body('status') status: BoardStatus,
-  // ) {
-  //   return this.boardsService.updateBoardStatus(id, status);
-  // }
+  @Delete(':id')
+  deleteBoardById(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.boardsService.deleteBoardById(id);
+  }
 }

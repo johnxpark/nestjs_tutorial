@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BoardStatus } from './boards.model';
+import { BoardsStatus } from './boards-status.enum';
 
 @Entity()
 export class Board extends BaseEntity {
@@ -13,5 +13,5 @@ export class Board extends BaseEntity {
   description: string;
 
   @Column()
-  status: BoardStatus;
+  status: BoardsStatus;
 }

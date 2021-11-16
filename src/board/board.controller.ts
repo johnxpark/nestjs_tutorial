@@ -10,41 +10,41 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { BoardsStatus } from './boards-status.enum';
-import { Board } from './boards.entity';
-import { BoardsService } from './boards.service';
+import { BoardStatus } from './board-status.enum';
+import { Board } from './board.entity';
+import { BoardService } from './board.service';
 import { createBoardDto } from './dto/create-board.dto';
 
-@Controller('boards')
-export class BoardsController {
-  constructor(private boardsService: BoardsService) {}
+@Controller('board')
+export class BoardController {
+  constructor(private boardService: BoardService) {}
 
   @Post()
   @UsePipes(ValidationPipe)
   createBoard(@Body() createBoardDto: createBoardDto): Promise<Board> {
-    return this.boardsService.createBoard(createBoardDto);
+    return this.boardService.createBoard(createBoardDto);
   }
 
   @Get(':id')
   getBoardById(@Param('id') id: number): Promise<Board> {
-    return this.boardsService.getBoardById(id);
+    return this.boardService.getBoardById(id);
   }
 
   @Get()
   getAllBoards(): Promise<Board[]> {
-    return this.boardsService.getAllBoards();
+    return this.boardService.getAllBoards();
   }
 
   @Patch(':id/status')
   updateBoardStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: BoardsStatus,
+    @Body('status') status: BoardStatus,
   ) {
-    return this.boardsService.updateBoardStatus(id, status);
+    return this.boardService.updateBoardStatus(id, status);
   }
 
   @Delete(':id')
   deleteBoardById(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.boardsService.deleteBoardById(id);
+    return this.boardService.deleteBoardById(id);
   }
 }

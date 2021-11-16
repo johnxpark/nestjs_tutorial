@@ -1,24 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BoardsStatus } from './boards-status.enum';
+import { BoardStatus } from './board-status.enum';
 import { v1 as uuid } from 'uuid';
 import { createBoardDto } from './dto/create-board.dto';
-import { BoardsRepository } from './boards.repository';
+import { BoardRepository } from './board.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from './boards.entity';
+import { Board } from './board.entity';
 
 @Injectable()
-export class BoardsService {
+export class BoardService {
   constructor(
-    @InjectRepository(BoardsRepository)
-    private BoardsRepository: BoardsRepository,
+    @InjectRepository(BoardRepository)
+    private BoardRepository: BoardRepository,
   ) {}
 
   createBoard(createBoardDto: createBoardDto): Promise<Board> {
-    return this.BoardsRepository.createBoard(createBoardDto);
+    return this.BoardRepository.createBoard(createBoardDto);
   }
 
   async getBoardById(id: number): Promise<Board> {
-    const found = await this.BoardsRepository.findOne(id);
+    const found = await this.BoardRepository.findOne(id);
     if (!found) {
       throw new NotFoundException(`Board Not Found, id: ${id}`);
     }
@@ -26,18 +26,18 @@ export class BoardsService {
   }
 
   async getAllBoards(): Promise<Board[]> {
-    return this.BoardsRepository.find();
+    return this.BoardRepository.find();
   }
 
-  async updateBoardStatus(id: number, status: BoardsStatus): Promise<Board> {
+  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     const board = await this.getBoardById(id);
     board.status = status;
-    await this.BoardsRepository.save(board);
+    await this.BoardRepository.save(board);
     return board;
   }
 
   async deleteBoardById(id: number): Promise<void> {
-    const result = await this.BoardsRepository.delete(id);
+    const result = await this.BoardRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Board Not Found, id: ${id}`);
     }
